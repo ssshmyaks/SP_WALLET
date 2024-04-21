@@ -1,7 +1,6 @@
+import keyboards
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-import keyboards
-import pyspapi
 from aiogram import Router, F
 from aiogram.filters import Command
 from aiogram.types import Message, CallbackQuery
@@ -26,20 +25,20 @@ async def connect(call: CallbackQuery):
 
 
 @rt.callback_query(F.data == 'connect')
-async def connect(call: CallbackQuery, state: FSMContext):
+async def card1(call: CallbackQuery, state: FSMContext):
 	await state.set_state(Card.id)
 	await call.message.answer('Отправьте ID карты')
 
 
 @rt.message(Card.id)
-async def card1(message: Message, state: FSMContext):
+async def card2(message: Message, state: FSMContext):
 	await state.update_data(id=message.text)
 	await state.set_state(Card.token)
 	await message.answer('Отправьте токен карты')
 
 
 @rt.message(Card.token)
-async def card2(message: Message, state: FSMContext):
+async def card3(message: Message, state: FSMContext):
 	await state.update_data(token=message.text)
 	user_id = message.from_user.id
 	data = await state.get_data()
