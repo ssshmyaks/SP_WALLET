@@ -1,3 +1,4 @@
+#Bot by ssshmyaks
 import asyncio
 import logging
 import config
