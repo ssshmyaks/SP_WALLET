@@ -19,6 +19,10 @@ class Transactions(StatesGroup):
 	comment = State()
 
 
+class Discord(StatesGroup):
+	id = State()
+
+
 @rt.callback_query(F.data == 'trans')
 async def transaction_one(call: CallbackQuery, state: FSMContext):
 	await state.set_state(Transactions.card)
@@ -74,3 +78,24 @@ async def balance(call: CallbackQuery):
 			print(f"id: {row[0]}, card: {row[1]}, token: {row[2]}")
 	sigma = pyspapi.SPAPI(card_id=row[1], token=row[1]).balance
 	await call.message.answer(f'Ваш баланс: {sigma}', reply_markup=await keyboards.again())
+
+
+@rt.callback_query(F.data == 'check')
+async def check1(call: CallbackQuery, state: FSMContext):
+	await state.set_state(Discord.id)
+	await call.message.answer('Отправьте Discord ID')
+
+
+@rt.message(Discord.id)
+async def check2(message: Message, state: FSMContext):
+	await state.update_data(id=message.text)
+	user_id = message.from_user.id
+	data = await state.get_data()
+	with sq.connect('database/database.py'):
+		table = 'a' + str(user_id)
+		cur.execute(f'SELECT id, card, token FROM {table}')
+		results = cur.fetchall()
+		for row in results:
+			print(f"id: {row[0]}, card: {row[1]}, token: {row[2]}")
+	SPUserProfile = pyspapi.SPAPI(card_id=row[1], token=row[2]).get_user(data["id"])
+	await message.answer(f'Игрок найден: {SPUserProfile}')

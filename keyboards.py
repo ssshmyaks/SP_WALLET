@@ -24,6 +24,12 @@ async def start_keyboard():
                         text="Как получить id и token",
                         callback_data="help"
                     )
+                ],
+                [
+                    InlineKeyboardButton(
+                        text="Проверить на наличие проходки",
+                        callback_data="check"
+                    )
                 ]
             ]
         )
@@ -40,7 +46,7 @@ async def again():
                 ],
                 [
                     InlineKeyboardButton(
-                        text="Баланс",
+                        text="Баланс (не работает)",
                         callback_data="balance"
                     )
                 ]

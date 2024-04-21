@@ -10,8 +10,7 @@ bot = Bot(token=config.BOT_TOKEN)
 dp = Dispatcher()
 
 
-if config.LOGGING:
-    logging.basicConfig(format='[+] %(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
+logging.basicConfig(format='[+] %(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 dp.include_routers(start.rt, transactions.rt)
 
